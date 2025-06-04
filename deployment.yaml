@@ -1,0 +1,22 @@
+# deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-deploy
+  labels:
+    app: eks-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eks-deploy
+  template:
+    metadata:
+      labels:
+        app: eks-deploy
+    spec:
+      containers:
+      - name: eks-deploy
+        image: my-springboot-app:latest   # update with your image tag if needed
+        ports:
+        - containerPort: 8080
