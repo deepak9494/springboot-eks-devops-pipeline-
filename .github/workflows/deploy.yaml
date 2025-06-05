@@ -40,3 +40,11 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push ${{ secrets.ECR_REPOSITORY }}:latest
+      - name: Update kubeconfig for EKS cluster
+        run: |
+          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+
+      - name: Deploy to EKS using kubectl
+        run: |
+          kubectl apply -f deploy.yaml
+          kubectl apply -f service.yaml
