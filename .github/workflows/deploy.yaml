@@ -64,12 +64,13 @@ jobs:
 
       - name: Deploy to EKS
         run: |
-          # Update image in deployment (optional)
-          kubectl set image deployment/my-deployment my-container=${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} --record
-          # Or apply full manifests
+          # Apply manifests first (creates or updates deployment & service)
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
-          
-          # Verify deployment
-          kubectl rollout status deployment/my-deployment
+
+          # Optional: Update image in deployment explicitly (if needed)
+          kubectl set image deployment/eks-deploy eks-deploy=${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+          # Verify rollout status and services
+          kubectl rollout status deployment/eks-deploy
           kubectl get svc
