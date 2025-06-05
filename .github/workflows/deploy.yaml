@@ -48,10 +48,24 @@ jobs:
           docker push ${{ secrets.ECR_REPOSITORY }}:latest
 
       - name: Update kubeconfig for EKS cluster
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
+          mkdir -p ~/.kube
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
+      - name: Check kubectl context
+        env:
+          KUBECONFIG: ~/.kube/config
+        run: |
+          kubectl config current-context
+          kubectl get nodes
+
       - name: Deploy to EKS using kubectl
+        env:
+          KUBECONFIG: ~/.kube/config
         run: |
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
