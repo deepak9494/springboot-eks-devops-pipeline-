@@ -33,6 +33,9 @@ jobs:
         run: |
           docker build -t my-springboot-app .
 
+      - name: Debug ECR_REPOSITORY secret
+        run: echo "ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}"
+
       - name: Tag Docker image
         run: |
           docker tag my-springboot-app:latest ${{ secrets.ECR_REPOSITORY }}:latest
@@ -40,6 +43,7 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push ${{ secrets.ECR_REPOSITORY }}:latest
+
       - name: Update kubeconfig for EKS cluster
         run: |
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
