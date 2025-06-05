@@ -33,8 +33,11 @@ jobs:
         run: |
           docker build -t my-springboot-app .
 
-      - name: Debug ECR_REPOSITORY secret
-        run: echo "ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}"
+      - name: Debug secrets
+        run: |
+          echo "ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}"
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}"
+          echo "EKS_CLUSTER_NAME=${{ secrets.EKS_CLUSTER_NAME }}"
 
       - name: Tag Docker image
         run: |
