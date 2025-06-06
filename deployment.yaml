@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: eks-deploy
-        image: my-springboot-app:latest   # update with your image tag if needed
+        image: 476114128104.dkr.ecr.us-east-1.amazonaws.com/springboot-eks-image  # update with your image tag if needed
         ports:
         - containerPort: 8080
